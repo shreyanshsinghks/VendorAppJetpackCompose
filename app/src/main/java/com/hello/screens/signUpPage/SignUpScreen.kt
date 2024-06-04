@@ -1,7 +1,5 @@
 package com.hello.screens.signUpPage
 
-import androidx.compose.foundation.interaction.Interaction
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,14 +31,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
+import androidx.navigation.NavHostController
+import com.hello.navigation.Routes
 
 @Composable
-fun SignUpScreen(viewModel: SignUpScreenViewModel) {
+fun SignUpScreen(viewModel: SignUpScreenViewModel, navHostController: NavHostController) {
     val userName = remember { mutableStateOf("") }
     val userNumber = remember { mutableStateOf("") }
     val userEmail = remember { mutableStateOf("") }
@@ -227,7 +224,7 @@ fun SignUpScreen(viewModel: SignUpScreenViewModel) {
         }
 
         State.FAILED.name -> Text(text = "Try Again")
-        State.SUCCESS.name -> Text(text = "Account Created Successfully!")
+        State.SUCCESS.name -> navHostController.navigate(Routes.Home)
     }
 
 
