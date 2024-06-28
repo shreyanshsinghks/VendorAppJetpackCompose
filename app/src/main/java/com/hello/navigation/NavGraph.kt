@@ -4,21 +4,21 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.hello.screens.HomeScreen.Home
-import com.hello.screens.signUpPage.SignUpScreen
-import com.hello.screens.signUpPage.SignUpScreenViewModel
+import com.hello.screens.HomeScreen
+import com.hello.screens.SignUpScreen
+import com.hello.viewmodel.VendorViewModel
 
 @Composable
-fun NavGraph(signUpScreenViewModel: SignUpScreenViewModel, navHostController: NavHostController) {
+fun NavGraph(vendorViewModel: VendorViewModel, navHostController: NavHostController) {
 
-    NavHost(navController = navHostController, startDestination = Routes.Home) {
+    NavHost(navController = navHostController, startDestination = Routes.HomeScreen) {
 
         composable<Routes.SignUpScreen> {
-            SignUpScreen(signUpScreenViewModel, navHostController = navHostController)
+            SignUpScreen(vendorViewModel = vendorViewModel, navHostController = navHostController)
         }
 
-        composable<Routes.Home> {
-            Home(navHostController = navHostController)
+        composable<Routes.HomeScreen> {
+            HomeScreen(vendorViewModel = vendorViewModel,navHostController = navHostController)
         }
     }
 }

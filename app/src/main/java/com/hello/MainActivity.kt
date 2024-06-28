@@ -12,8 +12,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.hello.navigation.NavGraph
-import com.hello.screens.signUpPage.SignUpScreen
-import com.hello.screens.signUpPage.SignUpScreenViewModel
+import com.hello.viewmodel.VendorViewModel
 import com.hello.ui.theme.VenderAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -21,7 +20,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val signUpScreenViewModel: SignUpScreenViewModel by viewModels()
+            val vendorViewModel: VendorViewModel by viewModels()
             val navHostController = rememberNavController()
             VenderAppTheme {
                 Scaffold {
@@ -31,7 +30,7 @@ class MainActivity : ComponentActivity() {
                             .padding(it)
                     ) {
                         NavGraph(
-                            signUpScreenViewModel = signUpScreenViewModel,
+                            vendorViewModel = vendorViewModel,
                             navHostController = navHostController
                         )
                     }

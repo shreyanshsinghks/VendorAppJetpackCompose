@@ -1,4 +1,4 @@
-package com.hello.screens.signUpPage
+package com.hello.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -35,9 +35,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.hello.navigation.Routes
+import com.hello.viewmodel.VendorViewModel
+import com.hello.viewmodel.State
 
 @Composable
-fun SignUpScreen(viewModel: SignUpScreenViewModel, navHostController: NavHostController) {
+fun SignUpScreen(vendorViewModel: VendorViewModel, navHostController: NavHostController) {
     val userName = remember { mutableStateOf("") }
     val userNumber = remember { mutableStateOf("") }
     val userEmail = remember { mutableStateOf("") }
@@ -46,7 +48,7 @@ fun SignUpScreen(viewModel: SignUpScreenViewModel, navHostController: NavHostCon
     val userPassword = remember { mutableStateOf("") }
 
 
-    when (viewModel.state.value) {
+    when (vendorViewModel.state.value) {
         State.DEFAULT.name -> {
             Column {
                 Column(Modifier.padding(16.dp, top = 30.dp)) {
@@ -193,7 +195,7 @@ fun SignUpScreen(viewModel: SignUpScreenViewModel, navHostController: NavHostCon
 
                     Button(
                         onClick = {
-                            viewModel.createUser(
+                            vendorViewModel.createUser(
                                 name = userName.value,
                                 password = userPassword.value,
                                 email = userEmail.value,
@@ -224,7 +226,7 @@ fun SignUpScreen(viewModel: SignUpScreenViewModel, navHostController: NavHostCon
         }
 
         State.FAILED.name -> Text(text = "Try Again")
-        State.SUCCESS.name -> navHostController.navigate(Routes.Home)
+        State.SUCCESS.name -> navHostController.navigate(Routes.HomeScreen)
     }
 
 

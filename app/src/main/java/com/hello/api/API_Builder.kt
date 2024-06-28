@@ -3,6 +3,7 @@ package com.hello.api
 import retrofit2.Response
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
+import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface API_Builder {
@@ -22,6 +23,9 @@ interface API_Builder {
 //    @GET("/getAllUsers")
 //    suspend fun getAllUsers()
 
+
+    @GET("/getAllProducts")
+    suspend fun getAllProducts(): ArrayList<ProductDataClassItem>
 
 
 

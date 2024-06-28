@@ -1,21 +1,26 @@
-package com.hello.screens.signUpPage
+package com.hello.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hello.api.ProductDataClassItem
 import com.hello.api.RetrofitInstance
 import kotlinx.coroutines.launch
+import kotlin.math.log
 
-class SignUpScreenViewModel : ViewModel() {
+class VendorViewModel : ViewModel() {
     var state = mutableStateOf("")
+    var products = mutableStateOf<List<ProductDataClassItem?>>(emptyList())
 
     init {
         state.value = State.DEFAULT.name
+        viewModelScope.launch {
+            products.value = RetrofitInstance.api.getAllProducts()
+        }
     }
 
-    fun setDefault() {
-        state.value = State.DEFAULT.name
-    }
 
     fun createUser(
         name: String,
