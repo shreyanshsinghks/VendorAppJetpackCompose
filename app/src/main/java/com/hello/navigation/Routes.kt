@@ -6,10 +6,14 @@ sealed class Routes {
 
     @Serializable
     object HomeScreen
+
     @Serializable
     object SignUpScreen
+
     @Serializable
     object SignInScreen
+
+
 
 
 }

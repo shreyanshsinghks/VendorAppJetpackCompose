@@ -15,6 +15,7 @@ squareupConverterGson = "latest.version"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-material-icons-extended-android = { module = "androidx.compose.material:material-icons-extended-android" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 converter-gson-vlatestversion = { module = "com.squareup.retrofit2:converter-gson", version.ref = "squareupConverterGson" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
