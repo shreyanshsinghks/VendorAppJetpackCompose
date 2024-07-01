@@ -37,6 +37,7 @@ import androidx.navigation.NavHostController
 import com.hello.navigation.Routes
 import com.hello.viewmodel.VendorViewModel
 import com.hello.viewmodel.State
+import kotlinx.coroutines.delay
 
 @Composable
 fun SignUpScreen(vendorViewModel: VendorViewModel, navHostController: NavHostController) {
@@ -195,6 +196,7 @@ fun SignUpScreen(vendorViewModel: VendorViewModel, navHostController: NavHostCon
 
                     Button(
                         onClick = {
+                            vendorViewModel.state.value = State.LOADING.name
                             vendorViewModel.createUser(
                                 name = userName.value,
                                 password = userPassword.value,
