@@ -2,6 +2,7 @@ package com.hello.navigation
 
 import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavHostController
@@ -15,9 +16,17 @@ import com.hello.viewmodel.VendorViewModel
 fun NavGraph(vendorViewModel: VendorViewModel, navHostController: NavHostController) {
 
     val userId by vendorViewModel.userId.collectAsState()
+    LaunchedEffect(key1 = userId) {
+        if (userId != 0) {
+            navHostController.navigate(Routes.HomeScreen) {
+                popUpTo(Routes.SignUpScreen) { inclusive = true }
+            }
+        }
+    }
 
     NavHost(
-        navController = navHostController, startDestination = if(userId == 0){Routes.SignUpScreen} else Routes.HomeScreen
+        navController = navHostController,
+        startDestination = Routes.SignUpScreen
     ) {
 
         composable<Routes.SignUpScreen> {
@@ -28,6 +37,5 @@ fun NavGraph(vendorViewModel: VendorViewModel, navHostController: NavHostControl
             HomeScreen(vendorViewModel = vendorViewModel, navHostController = navHostController)
         }
     }
-    Log.d("NavGraph", "After NavHost - userId: $userId")
 
 }

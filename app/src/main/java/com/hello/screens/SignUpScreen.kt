@@ -228,7 +228,9 @@ fun SignUpScreen(vendorViewModel: VendorViewModel, navHostController: NavHostCon
         }
 
         State.FAILED.name -> Text(text = "Try Again")
-        State.SUCCESS.name -> navHostController.navigate(Routes.HomeScreen)
+        State.SUCCESS.name -> {
+            HomeScreen(vendorViewModel = vendorViewModel, navHostController = navHostController)
+        }
     }
 
 

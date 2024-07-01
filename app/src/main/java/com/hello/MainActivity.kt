@@ -17,22 +17,18 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
 import androidx.navigation.compose.rememberNavController
 import com.hello.navigation.NavGraph
+import com.hello.pref.DataStoreManager
 import com.hello.viewmodel.VendorViewModel
 import com.hello.ui.theme.VenderAppTheme
+import com.hello.viewmodel.VendorViewModelFactory
 
 class MainActivity : ComponentActivity() {
-        private val vendorViewModel by viewModels<VendorViewModel>(
-        factoryProducer = {
-            object : ViewModelProvider.Factory {
-                override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return VendorViewModel(applicationContext) as T
-                }
-            }
-        }
-    )
+    private val dataStoreManager by lazy { DataStoreManager(applicationContext) }
+    private val vendorViewModel: VendorViewModel by viewModels {
+        VendorViewModelFactory(dataStoreManager)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-//        val vendorViewModel = ViewModelProvider(this).get(VendorViewModel::class)
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {

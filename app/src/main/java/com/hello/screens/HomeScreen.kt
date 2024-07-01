@@ -14,102 +14,62 @@ import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.ShoppingCart
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hello.viewmodel.VendorViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(vendorViewModel: VendorViewModel, navHostController: NavHostController) {
-    val bottomNavigationItemIndex = remember {
-        mutableStateOf(BottomNavigationItem.Dashboard.route)
-    }
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Box(
-            modifier = Modifier
-                .weight(0.95f)
-                .fillMaxWidth()
+    var selectedTab by remember { mutableStateOf(BottomNavigationItem.Dashboard) }
+
+    Column(modifier = Modifier.fillMaxSize()) {
+        Box(modifier = Modifier
+            .weight(0.95f)
+            .fillMaxWidth()
         ) {
-            Column(modifier = Modifier.fillMaxSize()) {
-                when (bottomNavigationItemIndex.value) {
-                    BottomNavigationItem.Dashboard.route -> {
-                        Text(text = "Dashboard")
-                    }
+            when (selectedTab) {
+                BottomNavigationItem.Dashboard -> Text("Dashboard")
+                BottomNavigationItem.Sales -> Text("Sales")
+                BottomNavigationItem.Orders -> Orders(vendorViewModel, navHostController)
+                BottomNavigationItem.Profile -> Text("Profile")
+            }
+        }
 
-                    BottomNavigationItem.Sales.route -> {
-                        Text(text = "Sales")
-                    }
-
-                    BottomNavigationItem.Orders.route -> {
-                        Orders(
-                            vendorViewModel = vendorViewModel,
-                            navHostController = navHostController
-                        )
-                    }
-
-                    BottomNavigationItem.Profile.route -> {
-                        Text(text = "Profile")
-                    }
+        Row(
+            modifier = Modifier
+                .weight(0.05f)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            BottomNavigationItem.values().forEach { item ->
+                IconButton(onClick = { selectedTab = item }) {
+                    Icon(
+                        imageVector = item.icon,
+                        contentDescription = item.name,
+                        tint = if (selectedTab == item) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    )
                 }
             }
         }
-
-        Box(
-            modifier = Modifier
-                .weight(0.05f)
-                .fillMaxWidth()
-        ) {
-            // Add your navigation bar here
-            Row(
-                modifier = Modifier.fillMaxSize(),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(imageVector = Icons.Rounded.Dashboard, contentDescription = null,
-                    modifier = Modifier.clickable {
-                        bottomNavigationItemIndex.value = BottomNavigationItem.Dashboard.route
-                    }
-                )
-                Icon(imageVector = Icons.Rounded.Money, contentDescription = null,
-                    modifier = Modifier.clickable {
-                        bottomNavigationItemIndex.value = BottomNavigationItem.Sales.route
-                    }
-                )
-                Icon(imageVector = Icons.Rounded.ShoppingCart, contentDescription = null,
-                    modifier = Modifier.clickable {
-                        bottomNavigationItemIndex.value = BottomNavigationItem.Orders.route
-                    }
-                )
-                Icon(imageVector = Icons.Rounded.Person, contentDescription = null,
-                    modifier = Modifier.clickable {
-                        bottomNavigationItemIndex.value = BottomNavigationItem.Profile.route
-                    }
-                )
-
-            }
-        }
     }
-
 }
 
-sealed class BottomNavigationItem(var route: String) {
-    object Dashboard : BottomNavigationItem("Dashboard")
-    object Sales : BottomNavigationItem("Sales")
-    object Orders : BottomNavigationItem("Orders")
-    object Profile : BottomNavigationItem("Profile")
+enum class BottomNavigationItem(val icon: ImageVector) {
+    Dashboard(Icons.Rounded.Dashboard),
+    Sales(Icons.Rounded.Money),
+    Orders(Icons.Rounded.ShoppingCart),
+    Profile(Icons.Rounded.Person)
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//private fun HomeScreenPreview() {
-//    HomeScreen(vendorViewModel = VendorViewModel(), navHostController = rememberNavController())
-//}

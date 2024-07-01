@@ -1,37 +1,19 @@
 package com.hello.viewmodel
 
-import android.content.Context
 import androidx.compose.runtime.mutableStateOf
-import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
-import androidx.datastore.preferences.core.PreferenceDataStoreFactory
-import androidx.datastore.preferences.core.emptyPreferences
-import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hello.api.ProductDataClassItem
 import com.hello.api.RetrofitInstance
-import com.hello.pref.UserPrefImp
-import kotlinx.coroutines.delay
+import com.hello.pref.DataStoreManager
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import perfetto.protos.UiState
 
-class VendorViewModel(val context: Context) : ViewModel() {
+class VendorViewModel(private val dataStoreManager: DataStoreManager) : ViewModel() {
 
     var state = mutableStateOf("")
     var products = mutableStateOf<List<ProductDataClassItem?>>(emptyList())
-    private val datastore = PreferenceDataStoreFactory.create(
-        corruptionHandler = ReplaceFileCorruptionHandler(
-            produceNewData = { emptyPreferences() }
-        ),
-        produceFile = { context.preferencesDataStoreFile("user_data") }
-    )
-
-    private val userPref = UserPrefImp(datastore)
-
-
     private val _userId = MutableStateFlow(0)
     val userId = _userId.asStateFlow()
 
@@ -39,7 +21,7 @@ class VendorViewModel(val context: Context) : ViewModel() {
         state.value = State.DEFAULT.name
         viewModelScope.launch {
             products.value = RetrofitInstance.api.getAllProducts()
-            userPref.getPref().collect {
+            dataStoreManager.userPref.getPref().collect {
                 _userId.value = it
             }
         }
@@ -47,7 +29,7 @@ class VendorViewModel(val context: Context) : ViewModel() {
 
     fun savePref(id: Int){
         viewModelScope.launch {
-            userPref.setPref(id)
+            dataStoreManager.userPref.setPref(id)
         }
     }
 
@@ -73,7 +55,6 @@ class VendorViewModel(val context: Context) : ViewModel() {
             if (result.isSuccessful) {
                 if (result.body()?.status == 200) {
                     savePref(151)
-                    delay(300)
                     state.value = State.SUCCESS.name
                 } else {
                     state.value = State.FAILED.name
